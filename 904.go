@@ -1,45 +1,28 @@
 package main
 
+// 1,2,3,2,2
+// i j
 func totalFruit(fruits []int) int {
-	baskets := make([]int, 0)
-	fruitTypes := make([]int, 0)
+	var left, right, maxPicked int
+	basket := map[int]int{}
 	n := len(fruits)
-	currentFruit := fruits[0]
-	currentBasket := 0
-	for j := 0; j < n; j++ {
-		if fruits[j] == currentFruit {
-			currentBasket++
-		} else {
-			baskets = append(baskets, currentBasket)
-			fruitTypes = append(fruitTypes, currentFruit)
-			currentBasket = 1
-			currentFruit = fruits[j]
-		}
-	}
-	baskets = append(baskets, currentBasket)
-	fruitTypes = append(fruitTypes, currentFruit)
-	// fmt.Println(baskets)
-	// fmt.Println(fruitTypes)
-	n = len(fruitTypes)
-	max := 0
-	for k := 0; k < n; k++ {
-		bag := map[int]int{}
-		for i := k; i < n; i++ {
-			if count, exists := bag[fruitTypes[i]]; exists {
-				bag[fruitTypes[i]] = count + baskets[i]
-			} else if len(bag) < 2 {
-				bag[fruitTypes[i]] = baskets[i]
-			} else {
-				break
+	for ; right < n; right++ {
+		if typeCount, exists := basket[fruits[right]]; exists || len(basket) < 2 {
+			basket[fruits[right]] = typeCount + 1
+			if count := right - left + 1; count > maxPicked {
+				maxPicked = count
 			}
+			continue
 		}
-		total := 0
-		for _, v := range bag {
-			total += v
-		}
-		if total > max {
-			max = total
+		basket[fruits[right]] = 1
+		for len(basket) > 2 {
+			typeCount := basket[fruits[left]] - 1
+			basket[fruits[left]] = typeCount
+			if typeCount == 0 {
+				delete(basket, fruits[left])
+			}
+			left++
 		}
 	}
-	return max
+	return maxPicked
 }
