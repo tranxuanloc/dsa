@@ -1,24 +1,25 @@
 package main
 
 func duplicateZeros(arr []int) {
-	n := len(arr)
-	j := 0
-	queue := make([]int, 0, n)
-	zero := false
-	for i := 0; i < n; i++ {
-		if zero {
-			queue = append(queue, arr[i])
-			arr[i] = 0
-			zero = false
-			continue
-		}
-		if j < len(queue) {
-			queue = append(queue, arr[i])
-			arr[i] = queue[j]
-			j++
-		}
+	n := len(arr) - 1
+	count := 0
+	for i := 0; i <= n-count; i++ {
 		if arr[i] == 0 {
-			zero = true
+			if i == n-count {
+				arr[n] = 0
+				n--
+			} else {
+				count++
+			}
+		}
+	}
+	for i := n - count; i >= 0; i-- {
+		if arr[i] == 0 {
+			arr[i+count] = 0
+			count--
+			arr[i+count] = 0
+		} else {
+			arr[i+count] = arr[i]
 		}
 	}
 }
