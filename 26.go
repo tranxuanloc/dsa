@@ -1,12 +1,12 @@
 package main
 
 func removeDuplicates(nums []int) int {
-	nextPos := 1
-	for _, num := range nums {
-		if num != nums[nextPos-1] {
-			nums[nextPos] = num
-			nextPos++
+	i := 0
+	for j := 1; j < len(nums); j++ {
+		if nums[j] != nums[i] {
+			i++
+			nums[i] = nums[j]
 		}
 	}
-	return nextPos
+	return i + 1
 }
